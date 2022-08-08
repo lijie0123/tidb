@@ -14,7 +14,7 @@
 
 include Makefile.common
 
-.PHONY: all clean test server dev benchkv benchraw check checklist parser tidy ddltest build_br build_lightning build_lightning-ctl build_dumpling ut bazel_build bazel_prepare bazel_test
+.PHONY: all clean test server dev benchkv benchraw check checklist parser tidy ddltest build_br build_lightning build_lightning-ctl build_dumpling ut bazel_build bazel_prepare bazel_test docker
 
 default: server buildsucc
 
@@ -427,3 +427,7 @@ bazel_golangcilinter:
 	bazel --output_user_root=/home/jenkins/.tidb/tmp run --config=ci --run_under="cd $(CURDIR) && " \
 		@com_github_golangci_golangci_lint//cmd/golangci-lint:golangci-lint \
 	-- run  $$($(PACKAGE_DIRECTORIES)) --config ./.cilinter.yaml
+
+docker:
+	make linux TARGET=bin/tidb-server
+	docker build -f build/Dockerfile bin -t tidb
